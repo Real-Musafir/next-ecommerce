@@ -7,7 +7,6 @@ const Toast = ({ msg, handleShow, bgColor }) => {
         right: "5px",
         zIndex: 9,
         minWidth: "280px",
-        opacity: 0.9,
       }}
     >
       <div className={`toast-header ${bgColor} text-light`}>
