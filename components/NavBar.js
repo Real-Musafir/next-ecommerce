@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { DataContext } from "../store/GlobalState";
+import Cookie from "js-cookie";
 
 const NavBar = () => {
   const router = useRouter;
@@ -42,10 +43,19 @@ const NavBar = () => {
         </a>
         <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a className="dropdown-item">Profile</a>
-          <a className="dropdown-item">Logout</a>
+          <button className="dropdown-item" onClick={handleLogout}>
+            Logout
+          </button>
         </div>
       </li>
     );
+  };
+
+  const handleLogout = () => {
+    Cookie.remove("refreshtoken", { path: "api/auth/accessToken" });
+    localStorage.removeItem("firstLogin");
+    dispatch({ type: "AUTH", payload: {} });
+    dispatch({ type: "NOTIFY", payload: { success: "Louged out!" } });
   };
 
   return (
