@@ -27,7 +27,18 @@ const NavBar = () => {
           aria-haspopup="true"
           aria-expanded="false"
         >
-          User Name
+          <img
+            src={auth.user.avatar}
+            alt={auth.user.avatar}
+            style={{
+              borderRadius: "50%",
+              widh: "30%",
+              height: "30px",
+              transform: "translateY(-3px)",
+              marginRight: "3px",
+            }}
+          />
+          {auth.user.name}
         </a>
         <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a className="dropdown-item">Profile</a>
