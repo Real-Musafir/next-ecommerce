@@ -30,7 +30,7 @@ export async function getServerSideProps() {
   return {
     props: {
       products: res.products,
-      result: res.results,
+      result: res.result,
     }, // will be passed to the page component as props
   };
 }
