@@ -3,6 +3,7 @@ import { useContext, useState, useEffect } from "react";
 import CartItem from "../components/CartItem";
 import { DataContext } from "../store/GlobalState";
 import Link from "next/link";
+import { getData } from "../utils/fetchData";
 
 const Cart = () => {
   const { state, dispatch } = useContext(DataContext);
@@ -19,6 +20,31 @@ const Cart = () => {
     };
     getTotal();
   }, [cart]);
+
+  useEffect(() => {
+    const cartLocal = JSON.parse(localStorage.getItem("cart_storage"));
+    if (cartLocal && cartLocal.length > 0) {
+      let newArr = [];
+      const updateCart = async () => {
+        for (const item of cartLocal) {
+          const res = await getData(`product/${item._id}`);
+          const { _id, title, images, price, inStock } = res.product;
+          if (inStock > 0) {
+            newArr.push({
+              _id,
+              title,
+              images,
+              price,
+              inStock,
+              quantity: item.quantity > inStock ? 1 : item.quantity,
+            });
+          }
+        }
+        dispatch({ type: "ADD_CART", payload: newArr });
+      };
+      updateCart();
+    }
+  }, []);
 
   if (cart.length === 0)
     return <img className="img-responsive w-100" src="/empty_cart.jpeg" />;

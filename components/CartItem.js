@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { decrease, increase } from "../store/Actions";
 
 const CartItem = ({ item, dispatch, cart }) => {
   return (
@@ -27,9 +28,21 @@ const CartItem = ({ item, dispatch, cart }) => {
       </td>
 
       <td className="align-middle" style={{ minWidth: "150px" }}>
-        <button className="btn btn-outline-secondary">-</button>
+        <button
+          className="btn btn-outline-secondary"
+          onClick={() => dispatch(decrease(cart, item._id))}
+          disabled={item.quantity === 1 ? true : false}
+        >
+          -
+        </button>
         <span className="px-3">{item.quantity}</span>
-        <button className="btn btn-outline-secondary">+</button>
+        <button
+          className="btn btn-outline-secondary"
+          onClick={() => dispatch(increase(cart, item._id))}
+          disabled={item.quantity === item.inStock ? true : false}
+        >
+          +
+        </button>
       </td>
 
       <td
