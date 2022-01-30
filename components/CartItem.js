@@ -49,7 +49,19 @@ const CartItem = ({ item, dispatch, cart }) => {
         className="align-middle"
         style={{ minWidth: "50px", cursor: "pointer" }}
       >
-        <i className="far fa-trash-alt text-danger" aria-hidden="true"></i>
+        <i
+          className="far fa-trash-alt text-danger"
+          aria-hidden="true"
+          style={{ fontSize: "18px" }}
+          data-toggle="modal"
+          data-target="#exampleModal"
+          onClick={() =>
+            dispatch({
+              type: "ADD_MODAL",
+              payload: { data: cart, id: item._id, title: item.title },
+            })
+          }
+        ></i>
       </td>
     </tr>
   );
