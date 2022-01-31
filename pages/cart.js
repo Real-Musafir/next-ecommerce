@@ -11,6 +11,10 @@ const Cart = () => {
 
   const [total, setTotal] = useState(0);
 
+  const [address, setAddress] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [payment, setPayment] = useState(true);
+
   useEffect(() => {
     const getTotal = () => {
       const res = cart.reduce((prev, item) => {
@@ -46,6 +50,17 @@ const Cart = () => {
     }
   }, []);
 
+  const handlePayment = () => {
+    if (!address || !mobile) {
+      console.log(address, mobile, "address & mobile");
+      return dispatch({
+        type: "NOTIFY",
+        payload: { error: "Please add your address and mobile" },
+      });
+      setPayment(true);
+    }
+  };
+
   if (cart.length === 0)
     return <img className="img-responsive w-100" src="/empty_cart.jpeg" />;
 
@@ -58,28 +73,29 @@ const Cart = () => {
         <h2 className="text-uppercase">Shopping Cart</h2>
 
         <table className="table my-3">
-          <table>
-            {cart.map((item) => (
-              <CartItem
-                key={item._id}
-                item={item}
-                dispatch={dispatch}
-                cart={cart}
-              />
-            ))}
-          </table>
+          {cart.map((item) => (
+            <CartItem
+              key={item._id}
+              item={item}
+              dispatch={dispatch}
+              cart={cart}
+            />
+          ))}
         </table>
       </div>
 
       <div className="col-md-4 my-3 text-right text-uppercase text-secondary">
         <form>
           <h2>Shipping</h2>
-          <label htmlFor="adress">Address</label>
+
+          <label htmlFor="address">Address</label>
           <input
             type="text"
             name="address"
             id="address"
             className="form-control mb-2"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
           />
 
           <label htmlFor="mobile">Mobile</label>
@@ -88,15 +104,19 @@ const Cart = () => {
             name="mobile"
             id="mobile"
             className="form-control mb-2"
+            value={mobile}
+            onChange={(e) => setMobile(e.target.value)}
           />
         </form>
 
         <h3>
-          Total: <span className="text-danger">${total}</span>{" "}
+          Total: <span className="text-danger">${total}</span>
         </h3>
 
-        <Link href={auth.user ? "#" : "/signin"}>
-          <a className="btn btn-dark my-2">Proceed with payment</a>
+        <Link href={auth.user ? "#!" : "/signin"}>
+          <a className="btn btn-dark my-2" onClick={handlePayment}>
+            Proceed with payment
+          </a>
         </Link>
       </div>
     </div>

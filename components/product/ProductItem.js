@@ -10,7 +10,7 @@ const ProductItem = ({ product }) => {
   const userLlink = () => {
     return (
       <>
-        <Link href={`product/${product._id}`}>
+        <Link href={`/product/${product._id}`}>
           <a className="btn btn-info" style={{ marginRight: "5px", flex: 1 }}>
             View
           </a>
