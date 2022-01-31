@@ -3,7 +3,7 @@ import { useContext, useState, useEffect } from "react";
 import CartItem from "../components/CartItem";
 import { DataContext } from "../store/GlobalState";
 import Link from "next/link";
-import { getData } from "../utils/fetchData";
+import { getData, postData } from "../utils/fetchData";
 
 const Cart = () => {
   const { state, dispatch } = useContext(DataContext);
@@ -32,7 +32,7 @@ const Cart = () => {
       const updateCart = async () => {
         for (const item of cartLocal) {
           const res = await getData(`product/${item._id}`);
-          const { _id, title, images, price, inStock } = res.product;
+          const { _id, title, images, price, inStock, sold } = res.product;
           if (inStock > 0) {
             newArr.push({
               _id,
@@ -40,6 +40,7 @@ const Cart = () => {
               images,
               price,
               inStock,
+              sold,
               quantity: item.quantity > inStock ? 1 : item.quantity,
             });
           }
@@ -57,8 +58,18 @@ const Cart = () => {
         type: "NOTIFY",
         payload: { error: "Please add your address and mobile" },
       });
-      setPayment(true);
     }
+
+    setPayment(true);
+
+    postData("order", { address, mobile, cart, total }, auth.token).then(
+      (res) => {
+        if (res.err)
+          return dispatch({ type: "NOTIFY", payload: { error: res.err } });
+        dispatch({ type: "ADD_CART", payload: [] });
+        return dispatch({ type: "NOTIFY", payload: { success: res.msg } });
+      }
+    );
   };
 
   if (cart.length === 0)
